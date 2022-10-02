@@ -35,7 +35,6 @@ all_sprites.add(weakEnemy)
 enemies.add(weakEnemy)
 enemies.add(Oven)
 
-weakEn.add(weakEnemy)
 platforms = []
 
 x = 0
@@ -98,10 +97,10 @@ while running:
     weakEnemy.update(movecheck)
     Oven.update(movecheck)
 
-    for enemy in weakEn:
+    for enemy in enemies:
         val = enemy.shoot()
         if val != 0:
-            enemyBullet.append(Projectile.waveEnemy(enemy.rect.left, enemy.rect.bottom, enemy.speed))
+            enemyBullet.append(Projectile.waveEnemy(round((enemy.rect.left + enemy.rect.right)//2), round((enemy.rect.bottom + enemy.rect.top)//2), enemy.speed))
 
     for waveEnemy in enemyBullet:
        die= waveEnemy.update()
