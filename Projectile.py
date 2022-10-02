@@ -18,9 +18,9 @@ class wave(pygame.sprite.Sprite):
 
     def update(self):
         if self.facing == "left":
-            self.rect.move_ip(-4, 0)
+            self.rect.move_ip(-8, 0)
         else:
-            self.rect.move_ip(4,0)
+            self.rect.move_ip(8,0)
     
 
     
