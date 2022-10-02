@@ -1,7 +1,7 @@
 import pygame
 import GameConstants
 import random
-
+import Projectile
 
 
 class weakEnemy(pygame.sprite.Sprite):
@@ -16,7 +16,9 @@ class weakEnemy(pygame.sprite.Sprite):
         self.yVel = 0
         self.speed = -1
         self.timer = random.randint(22, 28)
+        self.cool = 300
     def update(self, move):
+        #check for movement
         if move <= self.timer:
             self.rect.move_ip(self.speed, 0)
         
@@ -35,6 +37,16 @@ class weakEnemy(pygame.sprite.Sprite):
                     self.yVel = 0
                     self.onGround = True
                     self.rect.bottom = p.rect.top
+        
+    def shoot(self):
+        #check to shoot
+        if self.cool == 0:
+            self.cool = 300
+            return self.speed
+        else:
+            self.cool = self.cool - 1
+            return 0
+
 
 class Oven(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -48,6 +60,8 @@ class Oven(pygame.sprite.Sprite):
         if self.speed == 0:
             self.speed = -1
         self.timer = random.randint(4,7)
+        self.cool = 300
+        self.cool2 = 600
     def update(self, move):
         if move <= self.timer:
             self.rect.move_ip(self.speed,0)
@@ -61,6 +75,22 @@ class Oven(pygame.sprite.Sprite):
             self.rect.bottom = GameConstants.SCREEN_HEIGHT
         if self.rect.top <= 0:
             self.rect.top = 0
+    def shoot(self):
+        #check to shoot
+        if self.cool == 0:
+            self.cool = 300
+            return self.speed
+        else:
+            self.cool = self.cool - 1
+            return 0
+    def shoot2(self):
+        #check to shoot
+        if self.cool2 == 0:
+            self.cool2 = 300
+            return self.speed
+        else:
+            self.cool2 = self.cool2 - 1
+            return 0
     
     def collision(self, platforms):
         for p in platforms:

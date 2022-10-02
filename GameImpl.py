@@ -6,6 +6,7 @@ import GameConstants
 import Entities
 import random
 import Scroll
+import Projectile
 
 pygame.init()
 
@@ -18,6 +19,8 @@ screen.fill((255, 255, 255))
 platform = pygame.sprite.Group()
 enemies = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
+ovenMan = pygame.sprite.Group()
+proj = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
 bg = pygame.image.load("Sprites\chernobylfloor1.png")
@@ -25,9 +28,16 @@ bg = pygame.image.load("Sprites\chernobylfloor1.png")
 
 
 player = Player.PC()
+weakEnemy = Enemy.weakEnemy(400, GameConstants.SCREEN_HEIGHT-100)
+Oven = Enemy.Oven(600, 800)
 
 
 all_sprites.add(player)
+
+enemies.add(weakEnemy)
+enemies.add(Oven)
+
+ovenMan.add(Oven)
 
 platforms = []
 enemies = []
@@ -78,7 +88,8 @@ world = pygame.Surface((world_length, GameConstants.SCREEN_HEIGHT))
 
 camera = Scroll.Camera(player, world_length)
 
-
+enemyBullet = []
+grenade = []
 
 while running:
 
@@ -98,6 +109,30 @@ while running:
     movecheck = random.randint(0,100)
 
     player.update(pressed_keys)
+    weakEnemy.update(movecheck)
+    Oven.update(movecheck)
+
+    for enemy in enemies:
+        val = enemy.shoot()
+        if val != 0:
+            shot = Projectile.waveEnemy(round((enemy.rect.left + enemy.rect.right)//2), round((enemy.rect.bottom + enemy.rect.top)//2), enemy.speed)
+            proj.add(shot)
+            enemyBullet.append(shot)
+    
+    for oven in ovenMan:
+        val2 = oven.shoot2()
+        if val2 != 0:
+            shot2 = Projectile.grenade(round((oven.rect.left + oven.rect.right)//2), round((oven.rect.bottom + oven.rect.top)//2), enemy.speed)
+            grenade.append(shot2)
+            proj.add(shot2)
+    for waveEnemy in enemyBullet:
+       die= waveEnemy.update()
+       if die:
+        waveEnemy.kill()
+    for gre in grenade:
+       die= gre.update()
+       if die:
+        gre.kill()
     camera.update()
 
     world.fill((0,0,0))
@@ -121,9 +156,31 @@ while running:
         i += 1
     
    
-    world.blit(player.surf, player.rect)
+    i = 0
+    while i < len(enemies):
+        world.blit(enemies[i].surf, enemies[i].rect)
+        enemies[i].collision(platforms)
+        enemies[i].update(1)
+        i += 1
+    
    
+    world.blit(player.surf, player.rect)
+
+
+    world.blit(weakEnemy.surf, weakEnemy.rect)
+    world.blit(Oven.surf, Oven.rect)
+    
+    for waveEnemy in enemyBullet:
+        world.blit(waveEnemy.surf, waveEnemy.rect)
+    for gre in grenade:
+        world.blit(gre.surf, gre.rect)
     camera.draw(world, screen)
+
+  
+
+    if pygame.sprite.spritecollideany(player, proj):
+        player.kill()
+        running = False
 
     pygame.display.flip()
 
