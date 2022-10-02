@@ -18,8 +18,8 @@ class PC(pygame.sprite.Sprite):
             self.rect.move_ip(-1,0)
         if pressed_keys[GameConstants.K_UP]:
             self.rect.move_ip(0, -2)
-        if pressed_keys[GameConstants.K_SPACE]:
-            print("hello_world")
+       # if pressed_keys[GameConstants.K_SPACE]:
+       #     print("hello_world")
 
 
         if self.rect.left < 0:

@@ -1,15 +1,24 @@
+from cmath import rect
+import re
 import pygame
 import GameConstants
 
-class wave(object):
-    def __init__(self, x, y, radius, color, facing):
-        self.x = x
-        self.y = y
-        self.radius = radius
-        self.color = color
+class wave(pygame.sprite.Sprite):
+    def __init__(self, x, y, facing):
         self.facing = facing
-        self.vel = 8 * facing
+        self.surf = pygame.image.load("Sprites/waveprojectike.png").convert_alpha()
+        self.rect = self.surf.get_rect()
+        if facing == "left":
+            self.rect.right = x
+        else:
+            self.rect.left = x
+        self.rect.bottom = y
+
+    def update(self):
+        if self.facing == "left":
+            self.rect.move_ip(-4, 0)
+        else:
+            self.rect.move_ip(4,0)
     
 
-    def draw(self,window):
-        pygame.draw.circle(window, self.color, (self.x, self.y), self.radius)
+    
