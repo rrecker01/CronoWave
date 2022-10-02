@@ -20,7 +20,7 @@ enemies = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
-bg = pygame.image.load("Sprites\chernobylfloor1Stretch.png")
+bg = pygame.image.load("Sprites\chernobylfloor1.png")
 
 
 
@@ -33,6 +33,7 @@ all_sprites.add(player)
 all_sprites.add(weakEnemy)
 
 platforms = []
+enemies = []
 
 x = 0
 y = 0
@@ -42,9 +43,9 @@ map = ["                                                                        
 "                                                                                                                ",
 "                                                                                                                ",
 "                                                                                                                ",
-"                                                                                                                ",
+"                                                           o                                                    ",
 "                                                        ppppppp                                                 ",
-"                                                                                                                ",
+"                                                 e                                                              ",
 "                        ppppp                 pppp                                                              ",
 "                                                                                                                ",
 "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
@@ -55,10 +56,18 @@ map = ["                                                                        
 
 for row in map:
     for col in row:
-        if col != " ":
+        if col == "u" or col == "p" or col == "g":
             g = Entities.Platform(x,y, col)
             platforms.append(g)
             platform.add(g)
+        elif col == "o":
+            e = Enemy.Oven(x,y)
+            all_sprites.add(e)
+            enemies.append(e)
+        elif col == "e":
+            e = Enemy.weakEnemy(x,y)
+            all_sprites.add(e)
+            enemies.append(e)
         x += 44
     y += 44
     x = 0
@@ -92,17 +101,25 @@ while running:
     movecheck = random.randint(0,100)
 
     player.update(pressed_keys)
-    weakEnemy.update(movecheck)
-    Oven.update(movecheck)
     camera.update()
+
+    world.fill((0,0,0))
    
     world.blit(bg, (0,0))
     world.blit(bg, (1800 ,0))
+    world.blit(bg, (3600 ,0))
+
    
     i = 0
     while i < len(platforms):
         platforms[i].update
         world.blit(platforms[i].surf, platforms[i].rect)
+        i += 1
+
+    i = 0
+    while i < len(enemies):
+        enemies[i].update(movecheck)
+        world.blit(enemies[i].surf, platforms[i].rect)
         i += 1
    
     world.blit(player.surf, player.rect)
