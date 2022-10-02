@@ -25,7 +25,8 @@ proj = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
 bg = pygame.image.load("Sprites\chernobylfloor1.png")
-startScreen = pygame.image.load("Sprites\\titleframe1.png")
+startScreen = pygame.image.load("Sprites\space2.png")
+Title = pygame.image.load("Sprites\\titleframe1.png")
 
 
 
@@ -94,6 +95,9 @@ while running:
     timer = pygame.time.Clock()
 
     while title:
+        screen.blit(startScreen, (GameConstants.SCREEN_WIDTH/2, GameConstants.SCREEN_HEIGHT/2))
+        screen.blit(Title, (GameConstants.SCREEN_WIDTH/2, GameConstants.SCREEN_HEIGHT/2))
+        world.blit(screen,(0,0))
         for event in pygame.event.get():
             if event.type == GameConstants.KEYDOWN:
                 if event.key == GameConstants.K_SPACE:
@@ -101,8 +105,6 @@ while running:
                 elif event.key == GameConstants.K_ESCAPE:
                     running = False
                     title = False
-                else:
-                    screen.blit(startScreen, (0,0))
 
 
     for event in pygame.event.get():
@@ -139,11 +141,8 @@ while running:
         i+=1
 
     player.update(pressed_keys)
-
     
     camera.update()
-
-    world.fill((0,0,0))
    
     world.blit(bg, (0,0))
     world.blit(bg, (1800 ,0))
