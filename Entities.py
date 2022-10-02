@@ -4,9 +4,14 @@ import GameConstants
 
 class Platform(pygame.sprite.Sprite):
     
-    def __init__(self, x, y):
+    def __init__(self, x, y, tile):
         super(Platform, self).__init__()
-        self.surf = pygame.image.load("Sprites/insidegroundtile.png")
+        if tile == 'g':
+            self.surf = pygame.image.load("Sprites/insidegroundtile.png")
+        elif tile == 'p':
+            self.surf = pygame.image.load("Sprites/pipesection.png")
+        elif tile == 'u':
+            self.surf = pygame.image.load("Sprites/insideundetile.png")
         self.surf.set_colorkey((255, 255, 255), GameConstants.RLEACCEL)
         self.rect = self.surf.get_rect(midtop=(x,y))
         self.left = x
