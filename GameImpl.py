@@ -2,6 +2,7 @@ from operator import truediv
 import pygame
 import Player
 import Enemy
+import Projectile
 import GameConstants
 import Entities
 import random
@@ -23,24 +24,19 @@ ovenMan = pygame.sprite.Group()
 proj = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
-bg = pygame.image.load("Sprites\chernobylfloor1Stretch.png")
+bg = pygame.image.load("Sprites\chernobylfloor1.png")
 
 
 
 player = Player.PC()
-weakEnemy = Enemy.weakEnemy(400, GameConstants.SCREEN_HEIGHT-100)
-Oven = Enemy.Oven(600, 800)
 
 
 all_sprites.add(player)
-all_sprites.add(weakEnemy)
-
-enemies.add(weakEnemy)
-enemies.add(Oven)
-
-ovenMan.add(Oven)
-
+playerProjectiles = []
+playerShootCooldown = 0
+bulletDirection = "right"
 platforms = []
+enemies_map = []
 
 x = 0
 y = 0
@@ -51,8 +47,8 @@ map = ["                                                                        
 "                                                                                                                ",
 "                                                                                                                ",
 "                                                                                                                ",
-"                                                        ppppppp                                                 ",
-"                          ppppp               pppp                                                              ",
+"                          e                             lp p p pr                                               ",
+"                       lp p pr                  lp pr                                                            ",
 "                                                                                                                ",
 "                                                                                                                ",
 "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
@@ -63,10 +59,18 @@ map = ["                                                                        
 
 for row in map:
     for col in row:
-        if col != " ":
+        if col == "u" or col == "p" or col == "g" or col == "r" or col == "l":
             g = Entities.Platform(x,y, col)
             platforms.append(g)
             platform.add(g)
+        elif col == "o":
+            e = Enemy.Oven(x,y)
+            enemies.add(e)
+            enemies_map.append(e)
+        elif col == "e":
+            e = Enemy.weakEnemy(x,y)
+            enemies.add(e)
+            enemies_map.append(e)
         x += 44
     y += 44
     x = 0
@@ -91,6 +95,23 @@ while running:
         if event.type == GameConstants.KEYDOWN:
             if event.key == GameConstants.K_ESCAPE:
                 running = False
+            
+            if event.key == GameConstants.K_LEFT:
+                bulletDirection = "left"
+                #wx = player.rect.left
+            elif event.key == GameConstants.K_RIGHT:
+                bulletDirection = "right"
+                #wx = player.rect.right
+            if event.key == GameConstants.K_SPACE:
+                if playerShootCooldown == 0:
+                    playerShootCooldown = 60
+                    if bulletDirection == "left":
+                        wx = player.rect.left
+                    else:
+                        wx = player.rect.right
+                    wy = (player.rect.bottom + player.rect.top)/2
+                    newWave = Projectile.wave(wx, wy, bulletDirection)
+                    playerProjectiles.append(newWave)
         elif event.type == GameConstants.QUIT:
             running = False
 
@@ -100,9 +121,35 @@ while running:
 
     movecheck = random.randint(0,100)
 
+    i = 0
+    while i < len(playerProjectiles):
+        playerProjectiles[i].update()
+        i+=1
+
     player.update(pressed_keys)
-    weakEnemy.update(movecheck)
-    Oven.update(movecheck)
+
+    
+    camera.update()
+
+    world.fill((0,0,0))
+   
+    world.blit(bg, (0,0))
+    world.blit(bg, (1800 ,0))
+    world.blit(bg, (3600 ,0))
+
+   
+    i = 0
+    while i < len(platforms):
+        platforms[i].update
+        world.blit(platforms[i].surf, platforms[i].rect)
+        i += 1
+   
+    i = 0
+    while i < len(enemies_map):
+        world.blit(enemies_map[i].surf, enemies_map[i].rect)
+        enemies_map[i].collision(platforms)
+        enemies_map[i].update(1)
+        i += 1
 
     for enemy in enemies:
         val = enemy.shoot()
@@ -125,23 +172,12 @@ while running:
        die= gre.update()
        if die:
         gre.kill()
-    camera.update()
-   
-    world.blit(bg, (0,0))
-    world.blit(bg, (1800 ,0))
-   
-    i = 0
-    while i < len(platforms):
-        platforms[i].update
-        world.blit(platforms[i].surf, platforms[i].rect)
-        i += 1
+    
    
     world.blit(player.surf, player.rect)
 
-
-    world.blit(weakEnemy.surf, weakEnemy.rect)
-    world.blit(Oven.surf, Oven.rect)
-    
+    for wave in playerProjectiles:
+        world.blit(wave.surf, wave.rect) 
     for waveEnemy in enemyBullet:
         world.blit(waveEnemy.surf, waveEnemy.rect)
     for gre in grenade:
@@ -155,8 +191,9 @@ while running:
         running = False
 
     pygame.display.flip()
-
-    timer.tick(70)
+    if playerShootCooldown > 0:
+        playerShootCooldown = playerShootCooldown -1
+    timer.tick(140)
 
 
 
