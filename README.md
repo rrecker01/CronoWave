@@ -4,7 +4,7 @@ Our game, "ChronoWave: Global Appliance" follows the protagonist who is a part o
 over the Earth as the only power source available. In this world, humans have advanced to have microwaves for heads and require constant power to live. The grand
 populus use large coal ovens on their backs to generate power, while you the protagonist use a wind powered battery to power yourself. The game starts during the final
 fight against the Furnace of Fate and you're losing...bad. You need a stronger source of renewable energy to fight back and win, so you time travel back to 1986 to
-acquire the strongest energy possible...nuclear...
+acquire the strongest energy possible (that is actually far more environmentally friendly than fossil fuels both in terms of waste product and radiation) nuclear...
 
 
 Controls:
