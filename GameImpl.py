@@ -6,6 +6,7 @@ import GameConstants
 import Entities
 import random
 import Scroll
+import Projectile
 
 pygame.init()
 
@@ -18,6 +19,7 @@ screen.fill((255, 255, 255))
 platform = pygame.sprite.Group()
 enemies = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
+weakEn = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
 
@@ -30,6 +32,10 @@ Oven = Enemy.Oven(600,100)
 all_sprites.add(player)
 all_sprites.add(weakEnemy)
 
+enemies.add(weakEnemy)
+enemies.add(Oven)
+
+weakEn.add(weakEnemy)
 platforms = []
 
 x = 0
@@ -70,7 +76,7 @@ world = pygame.Surface((world_length, GameConstants.SCREEN_HEIGHT))
 
 camera = Scroll.Camera(player, world_length)
 
-
+enemyBullet = []
 
 while running:
 
@@ -91,6 +97,16 @@ while running:
     player.update(pressed_keys)
     weakEnemy.update(movecheck)
     Oven.update(movecheck)
+
+    for enemy in weakEn:
+        val = enemy.shoot()
+        if val != 0:
+            enemyBullet.append(Projectile.waveEnemy(enemy.rect.left, enemy.rect.bottom, enemy.speed))
+
+    for waveEnemy in enemyBullet:
+       die= waveEnemy.update()
+       if die:
+        waveEnemy.kill()
     camera.update()
    
     world.fill((255, 255, 255))
@@ -105,7 +121,9 @@ while running:
 
     world.blit(weakEnemy.surf, weakEnemy.rect)
     world.blit(Oven.surf, Oven.rect)
-   
+    
+    for waveEnemy in enemyBullet:
+        world.blit(waveEnemy.surf, waveEnemy.rect)
     camera.draw(world, screen)
 
     

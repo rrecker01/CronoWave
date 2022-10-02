@@ -16,7 +16,19 @@ class wave(pygame.sprite.Sprite):
 
 class waveEnemy(pygame.sprite.Sprite):
     def __init__(self, x, y, facing):
-        self.x = x
-        self.y = y
+        self.surf = pygame.image.load("Sprites/waveprojectike.png")
+        self.rect = self.surf.get_rect()
+        self.rect.left = x
+        self.rect.bottom = y
         self.facing = facing
-        self.vel = 8 * facing
+
+    def update(self):
+        self.rect.move_ip(2*self.facing,0)
+
+        #check borders
+        if self.rect.left < 0:
+            return False
+        if self.rect.right > GameConstants.SCREEN_WIDTH:
+            return False
+       
+
