@@ -46,7 +46,7 @@ map = ["                                                                        
 "                                                                                                                ",
 "                                                                                                                ",
 "                                                                                                                ",
-"                                                                                                                ",
+"                                                             o                                                  ",
 "                          e                             lp p p pr                                               ",
 "                       lp p pr                  lp pr                                                            ",
 "                                                                                                                ",
@@ -119,8 +119,6 @@ while running:
 
     pressed_keys = pygame.key.get_pressed()
 
-    movecheck = random.randint(0,100)
-
     i = 0
     while i < len(playerProjectiles):
         playerProjectiles[i].update()
@@ -148,7 +146,7 @@ while running:
     while i < len(enemies_map):
         world.blit(enemies_map[i].surf, enemies_map[i].rect)
         enemies_map[i].collision(platforms)
-        enemies_map[i].update(1)
+        enemies_map[i].update()
         i += 1
 
     for enemy in enemies:
