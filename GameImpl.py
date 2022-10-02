@@ -27,6 +27,7 @@ playerProj = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
 bg = pygame.image.load("Sprites\chernobylfloor1.png")
+startScreen = pygame.image.load("Sprites\\titleframe1.png")
 
 
 
@@ -49,7 +50,7 @@ map = ["                                                                        
 "                                                                                                                ",
 "                                                                                                                ",
 "                                                                                                                ",
-"                                                                                                                ",
+"                                                             o                                                  ",
 "                          e                             lp p p pr                                               ",
 "                       lp p pr                  lp pr                                                            ",
 "                                                                                                                ",
@@ -91,10 +92,23 @@ camera = Scroll.Camera(player, world_length)
 
 enemyBullet = []
 grenade = []
+title = True
 
 while running:
 
     timer = pygame.time.Clock()
+
+    while title:
+        for event in pygame.event.get():
+            if event.type == GameConstants.KEYDOWN:
+                if event.key == GameConstants.K_SPACE:
+                    title = False
+                elif event.key == GameConstants.K_ESCAPE:
+                    running = False
+                    title = False
+                else:
+                    screen.blit(startScreen, (0,0))
+
 
     for event in pygame.event.get():
         if event.type == GameConstants.KEYDOWN:
@@ -125,8 +139,6 @@ while running:
 
     pressed_keys = pygame.key.get_pressed()
 
-    movecheck = random.randint(0,100)
-
     i = 0
     while i < len(playerProjectiles):
         playerProjectiles[i].update()
@@ -154,7 +166,7 @@ while running:
     while i < len(enemies_map):
         world.blit(enemies_map[i].surf, enemies_map[i].rect)
         enemies_map[i].collision(platforms)
-        enemies_map[i].update(1)
+        enemies_map[i].update()
         i += 1
 
     for enemy in weakEn:
