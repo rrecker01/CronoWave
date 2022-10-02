@@ -19,14 +19,14 @@ screen.fill((255, 255, 255))
 platform = pygame.sprite.Group()
 enemies = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
-weakEn = pygame.sprite.Group()
+ovenMan = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
 
 
 player = Player.PC()
-weakEnemy = Enemy.weakEnemy(400, GameConstants.SCREEN_HEIGHT/4)
-Oven = Enemy.Oven(600,100)
+weakEnemy = Enemy.weakEnemy(400, GameConstants.SCREEN_HEIGHT-100)
+Oven = Enemy.Oven(600, 800)
 
 
 all_sprites.add(player)
@@ -34,6 +34,8 @@ all_sprites.add(weakEnemy)
 
 enemies.add(weakEnemy)
 enemies.add(Oven)
+
+ovenMan.add(Oven)
 
 platforms = []
 
@@ -76,6 +78,7 @@ world = pygame.Surface((world_length, GameConstants.SCREEN_HEIGHT))
 camera = Scroll.Camera(player, world_length)
 
 enemyBullet = []
+grenade = []
 
 while running:
 
@@ -101,11 +104,19 @@ while running:
         val = enemy.shoot()
         if val != 0:
             enemyBullet.append(Projectile.waveEnemy(round((enemy.rect.left + enemy.rect.right)//2), round((enemy.rect.bottom + enemy.rect.top)//2), enemy.speed))
-
+    
+    for oven in ovenMan:
+        val2 = oven.shoot2()
+        if val2 != 0:
+            grenade.append(Projectile.grenade(round((oven.rect.left + oven.rect.right)//2), round((oven.rect.bottom + oven.rect.top)//2), enemy.speed))
     for waveEnemy in enemyBullet:
        die= waveEnemy.update()
        if die:
         waveEnemy.kill()
+    for gre in grenade:
+       die= gre.update()
+       if die:
+        gre.kill()
     camera.update()
    
     world.fill((255, 255, 255))
@@ -123,6 +134,8 @@ while running:
     
     for waveEnemy in enemyBullet:
         world.blit(waveEnemy.surf, waveEnemy.rect)
+    for gre in grenade:
+        world.blit(gre.surf, gre.rect)
     camera.draw(world, screen)
 
     

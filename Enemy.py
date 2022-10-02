@@ -57,6 +57,7 @@ class Oven(pygame.sprite.Sprite):
             self.speed = -1
         self.timer = random.randint(4,7)
         self.cool = 300
+        self.cool2 = 600
     def update(self, move):
         if move <= self.timer:
             self.rect.move_ip(self.speed,0)
@@ -78,6 +79,15 @@ class Oven(pygame.sprite.Sprite):
         else:
             self.cool = self.cool - 1
             return 0
+    def shoot2(self):
+        #check to shoot
+        if self.cool2 == 0:
+            self.cool2 = 300
+            return self.speed
+        else:
+            self.cool2 = self.cool2 - 1
+            return 0
+
 class Idol(pygame.sprite.Sprite):
     def __init__(self):
         super(Idol, self).__init__()

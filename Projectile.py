@@ -1,5 +1,6 @@
 import pygame
 import GameConstants
+import random
 
 class wave(pygame.sprite.Sprite):
     def __init__(self, x, y, radius, color, facing):
@@ -30,5 +31,28 @@ class waveEnemy(pygame.sprite.Sprite):
             return False
         if self.rect.right > GameConstants.SCREEN_WIDTH:
             return False
-       
 
+class grenade(pygame.sprite.Sprite):
+    def __init__(self,x, y, facing):
+        #change image
+        self.surf = pygame.image.load("Sprites/waveprojectike.png")
+        self.rect = self.surf.get_rect()
+        self.rect.left = x
+        self.rect.bottom = y
+        self.facing = facing
+        self.gravity = -3
+    
+    def update(self):
+        value = random.randint(0,15)
+        if value != 1:
+            value = 0
+        self.gravity = self.gravity + value
+        self.rect.move_ip(2*self.facing, self.gravity)
+
+        #check borders
+        if self.rect.left < 0:
+            return False
+        if self.rect.right > GameConstants.SCREEN_WIDTH:
+            return False
+        if self.rect.bottom >= GameConstants.SCREEN_HEIGHT:
+            return False
