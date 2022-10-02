@@ -18,11 +18,12 @@ class wave(pygame.sprite.Sprite):
 class waveEnemy(pygame.sprite.Sprite):
     def __init__(self, x, y, facing):
         super(waveEnemy, self).__init__()
-        self.surf = pygame.image.load("Sprites/waveprojectike.png")
+        self.surf = pygame.image.load("Sprites/waveprojectikegreen.png")
         self.rect = self.surf.get_rect()
         self.rect.left = x
         self.rect.bottom = y
         self.facing = facing
+        self.damage = 1
 
     def update(self):
         self.rect.move_ip(2*self.facing,0)
@@ -32,16 +33,20 @@ class waveEnemy(pygame.sprite.Sprite):
             return False
         if self.rect.right > GameConstants.SCREEN_WIDTH:
             return False
-
+    
+    def returnDamage(self):
+        return self.damage
+    
 class grenade(pygame.sprite.Sprite):
     def __init__(self,x, y, facing):
         super(grenade, self).__init__()
         #change image
-        self.surf = pygame.image.load("Sprites/waveprojectike.png")
+        self.surf = pygame.image.load("Sprites/coalattack.png")
         self.rect = self.surf.get_rect()
         self.rect.left = x
         self.rect.bottom = y
         self.facing = facing
+        self.damage = 2
         self.gravity = -3
     
     def update(self):
@@ -58,3 +63,6 @@ class grenade(pygame.sprite.Sprite):
             return False
         if self.rect.bottom >= GameConstants.SCREEN_HEIGHT:
             return False
+
+    def returnDamage(self):
+        return self.damage

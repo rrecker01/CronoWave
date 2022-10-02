@@ -21,6 +21,7 @@ enemies = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 ovenMan = pygame.sprite.Group()
 proj = pygame.sprite.Group()
+weakEn = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
 bg = pygame.image.load("Sprites\chernobylfloor1Stretch.png")
@@ -28,9 +29,9 @@ bg = pygame.image.load("Sprites\chernobylfloor1Stretch.png")
 
 
 player = Player.PC()
-weakEnemy = Enemy.weakEnemy(400, GameConstants.SCREEN_HEIGHT-100)
-Oven = Enemy.Oven(600, 800)
-
+weakEnemy = Enemy.weakEnemy(400, 500)
+Oven = Enemy.Oven(600, 400)
+health = Player.healthBar()
 
 all_sprites.add(player)
 all_sprites.add(weakEnemy)
@@ -38,6 +39,7 @@ all_sprites.add(weakEnemy)
 enemies.add(weakEnemy)
 enemies.add(Oven)
 
+weakEn.add(weakEnemy) 
 ovenMan.add(Oven)
 
 platforms = []
@@ -104,7 +106,7 @@ while running:
     weakEnemy.update(movecheck)
     Oven.update(movecheck)
 
-    for enemy in enemies:
+    for enemy in weakEn:
         val = enemy.shoot()
         if val != 0:
             shot = Projectile.waveEnemy(round((enemy.rect.left + enemy.rect.right)//2), round((enemy.rect.bottom + enemy.rect.top)//2), enemy.speed)
@@ -147,12 +149,19 @@ while running:
     for gre in grenade:
         world.blit(gre.surf, gre.rect)
     camera.draw(world, screen)
+    screen.blit(health.surf, health.rect)
 
   
 
     if pygame.sprite.spritecollideany(player, proj):
-        player.kill()
-        running = False
+        collision = pygame.sprite.spritecollide(player, proj, False)
+        if collision:
+            death = player.takeDamage(collision[0].damage)
+            health.update(player.currhealth)
+
+            if death:
+                player.kill()
+                running = False
 
     pygame.display.flip()
 

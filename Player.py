@@ -14,6 +14,9 @@ class PC(pygame.sprite.Sprite):
         self.onGround = True
         self.yVel = 0
         self.xVel = 0
+        self.currhealth = 10
+        self.invinc = 0
+
 
     def update(self, pressed_keys):
         if pressed_keys[GameConstants.K_RIGHT]:
@@ -48,7 +51,10 @@ class PC(pygame.sprite.Sprite):
             self.onGround = True
         if self.rect.top <= 0:
             self.rect.top = 0
-    
+
+        #check invincibility
+        if self.invinc != 0:
+            self.invinc = self.invinc - 1
     def collision(self, platforms):
         for p in platforms:
             if pygame.sprite.collide_rect(self, p):
@@ -64,5 +70,26 @@ class PC(pygame.sprite.Sprite):
                 if p.rect.right == self.rect.left:
                     self.rect.left = p.rect.right
                     self.xVel = 0
+    
+    def takeDamage(self,damage):
+        if self.invinc == 0:
+            self.currhealth = self.currhealth - damage
+            self.invinc = 40
+        if self.currhealth <= 0:
+            return True
+        return False
 
-            
+class healthBar(pygame.sprite.Sprite):
+    def __init__(self):
+        super(healthBar, self).__init__()
+        self.length = 300
+        self.height = 30
+        self.surf = pygame.Surface((self.length,self.height))
+        self.surf.fill((0,128,0))
+        self.rect = self.surf.get_rect()
+        self.rect.bottom = GameConstants.SCREEN_HEIGHT
+        self.rect.left = 0
+
+    def update(self, health):
+        self.surf = pygame.Surface((health*30,self.height))
+        self.surf.fill((0,128,0))

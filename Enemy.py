@@ -16,7 +16,7 @@ class weakEnemy(pygame.sprite.Sprite):
         if self.speed == 0:
             self.speed = -1
         self.timer = random.randint(22, 28)
-        self.cool = 300
+        self.cool = 100
     def update(self, move):
         #check for movement
         if move <= self.timer:
