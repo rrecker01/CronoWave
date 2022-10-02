@@ -20,6 +20,8 @@ enemies = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
+bg = pygame.image.load("Sprites\chernobylfloor1Stretch.png")
+
 
 
 player = Player.PC()
@@ -41,20 +43,20 @@ map = ["                                                                        
 "                                                                                                                ",
 "                                                                                                                ",
 "                                                                                                                ",
+"                                                        ppppppp                                                 ",
 "                                                                                                                ",
+"                        ppppp                 pppp                                                              ",
 "                                                                                                                ",
-"                                                                                                                ",
-"                                                                                                                ",
-"                                                                                                                ",
-"                                                                                                                ",
-"                                                                                                                ",
-"                                                                                                                ",
-"gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"]
+"gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
+"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu"]
 
 for row in map:
     for col in row:
-        if col == "g":
-            g = Entities.Platform(x,y)
+        if col != " ":
+            g = Entities.Platform(x,y, col)
             platforms.append(g)
             platform.add(g)
         x += 44
@@ -94,7 +96,8 @@ while running:
     Oven.update(movecheck)
     camera.update()
    
-    world.fill((255, 255, 255))
+    world.blit(bg, (0,0))
+    world.blit(bg, (1800 ,0))
    
     i = 0
     while i < len(platforms):
@@ -103,9 +106,6 @@ while running:
         i += 1
    
     world.blit(player.surf, player.rect)
-
-    world.blit(weakEnemy.surf, weakEnemy.rect)
-    world.blit(Oven.surf, Oven.rect)
    
     camera.draw(world, screen)
 
