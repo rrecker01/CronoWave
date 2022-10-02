@@ -12,6 +12,10 @@ class Platform(pygame.sprite.Sprite):
             self.surf = pygame.image.load("Sprites/pipesection.png")
         elif tile == 'u':
             self.surf = pygame.image.load("Sprites/insideundetile.png")
+        elif tile == 'l':
+            self.surf = pygame.image.load("Sprites/pipeend.png")
+        elif tile == 'r':
+            self.surf = pygame.image.load("Sprites/pipeend.png")
         self.surf.set_colorkey((255, 255, 255), GameConstants.RLEACCEL)
         self.rect = self.surf.get_rect(midtop=(x,y))
         self.left = x

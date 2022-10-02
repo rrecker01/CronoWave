@@ -25,12 +25,9 @@ bg = pygame.image.load("Sprites\chernobylfloor1.png")
 
 
 player = Player.PC()
-weakEnemy = Enemy.weakEnemy(400, GameConstants.SCREEN_HEIGHT/4)
-Oven = Enemy.Oven(600,100)
 
 
 all_sprites.add(player)
-all_sprites.add(weakEnemy)
 
 platforms = []
 enemies = []
@@ -44,9 +41,9 @@ map = ["                                                                        
 "                                                                                                                ",
 "                                                                                                                ",
 "                                                                                                                ",
-"                         e                              ppppppp                                                 ",
-"                       ppppp                  pppp                                                              ",
-"                                                                                                            ",
+"                          e                             p p p p                                                 ",
+"                       lp p pr                  lp pr                                                            ",
+"                                                                                                                ",
 "                                                                                                                ",
 "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
 "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
@@ -56,7 +53,7 @@ map = ["                                                                        
 
 for row in map:
     for col in row:
-        if col == "u" or col == "p" or col == "g":
+        if col == "u" or col == "p" or col == "g" or col == "r" or col == "l":
             g = Entities.Platform(x,y, col)
             platforms.append(g)
             platform.add(g)
@@ -118,9 +115,11 @@ while running:
 
     i = 0
     while i < len(enemies):
+        world.blit(enemies[i].surf, enemies[i].rect)
+        enemies[i].collision(platforms)
         enemies[i].update(1)
-        world.blit(enemies[i].surf, platforms[i].rect)
         i += 1
+    
    
     world.blit(player.surf, player.rect)
    
