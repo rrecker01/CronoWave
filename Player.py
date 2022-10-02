@@ -27,8 +27,7 @@ class PC(pygame.sprite.Sprite):
             self.onGround = False
         if self.onGround == False:
             self.yVel +=0.3
-        if pressed_keys[GameConstants.K_SPACE]:
-            print("hello_world")
+        
         
         self.rect.top += self.yVel
 

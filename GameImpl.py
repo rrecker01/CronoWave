@@ -28,19 +28,12 @@ bg = pygame.image.load("Sprites\chernobylfloor1.png")
 
 
 player = Player.PC()
-weakEnemy = Enemy.weakEnemy(400, GameConstants.SCREEN_HEIGHT-100)
-Oven = Enemy.Oven(600, 800)
 
 
 all_sprites.add(player)
 
-enemies.add(weakEnemy)
-enemies.add(Oven)
-
-ovenMan.add(Oven)
-
 platforms = []
-enemies = []
+enemies_map = []
 
 x = 0
 y = 0
@@ -69,12 +62,12 @@ for row in map:
             platform.add(g)
         elif col == "o":
             e = Enemy.Oven(x,y)
-            all_sprites.add(e)
-            enemies.append(e)
+            enemies.add(e)
+            enemies_map.append(e)
         elif col == "e":
             e = Enemy.weakEnemy(x,y)
-            all_sprites.add(e)
-            enemies.append(e)
+            enemies.add(e)
+            enemies_map.append(e)
         x += 44
     y += 44
     x = 0
@@ -109,8 +102,29 @@ while running:
     movecheck = random.randint(0,100)
 
     player.update(pressed_keys)
-    weakEnemy.update(movecheck)
-    Oven.update(movecheck)
+
+    
+    camera.update()
+
+    world.fill((0,0,0))
+   
+    world.blit(bg, (0,0))
+    world.blit(bg, (1800 ,0))
+    world.blit(bg, (3600 ,0))
+
+   
+    i = 0
+    while i < len(platforms):
+        platforms[i].update
+        world.blit(platforms[i].surf, platforms[i].rect)
+        i += 1
+   
+    i = 0
+    while i < len(enemies_map):
+        world.blit(enemies_map[i].surf, enemies_map[i].rect)
+        enemies_map[i].collision(platforms)
+        enemies_map[i].update(1)
+        i += 1
 
     for enemy in enemies:
         val = enemy.shoot()
@@ -133,42 +147,10 @@ while running:
        die= gre.update()
        if die:
         gre.kill()
-    camera.update()
-
-    world.fill((0,0,0))
-   
-    world.blit(bg, (0,0))
-    world.blit(bg, (1800 ,0))
-    world.blit(bg, (3600 ,0))
-
-   
-    i = 0
-    while i < len(platforms):
-        platforms[i].update
-        world.blit(platforms[i].surf, platforms[i].rect)
-        i += 1
-
-    i = 0
-    while i < len(enemies):
-        world.blit(enemies[i].surf, enemies[i].rect)
-        enemies[i].collision(platforms)
-        enemies[i].update(1)
-        i += 1
-    
-   
-    i = 0
-    while i < len(enemies):
-        world.blit(enemies[i].surf, enemies[i].rect)
-        enemies[i].collision(platforms)
-        enemies[i].update(1)
-        i += 1
     
    
     world.blit(player.surf, player.rect)
 
-
-    world.blit(weakEnemy.surf, weakEnemy.rect)
-    world.blit(Oven.surf, Oven.rect)
     
     for waveEnemy in enemyBullet:
         world.blit(waveEnemy.surf, waveEnemy.rect)
@@ -184,7 +166,7 @@ while running:
 
     pygame.display.flip()
 
-    timer.tick(70)
+    timer.tick(60)
 
 
 
