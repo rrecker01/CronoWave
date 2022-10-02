@@ -9,8 +9,11 @@ acquire the strongest energy possible (that is actually far more environmentally
 
 Controls:
 A = Left
+
 D = Right
+
 w = Jump
+
 Space = Shoot
 
 
