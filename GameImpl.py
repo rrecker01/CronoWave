@@ -23,6 +23,7 @@ all_sprites = pygame.sprite.Group()
 ovenMan = pygame.sprite.Group()
 proj = pygame.sprite.Group()
 weakEn = pygame.sprite.Group()
+playerProj = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
 bg = pygame.image.load("Sprites\chernobylfloor1.png")
@@ -30,19 +31,7 @@ bg = pygame.image.load("Sprites\chernobylfloor1.png")
 
 
 player = Player.PC()
-weakEnemy = Enemy.weakEnemy(400, 500)
-Oven = Enemy.Oven(600, 400)
 health = Player.healthBar()
-
-all_sprites.add(player)
-all_sprites.add(weakEnemy)
-
-enemies.add(weakEnemy)
-enemies.add(Oven)
-
-weakEn.add(weakEnemy) 
-ovenMan.add(Oven)
-
 
 
 all_sprites.add(player)
@@ -80,10 +69,12 @@ for row in map:
         elif col == "o":
             e = Enemy.Oven(x,y)
             enemies.add(e)
+            ovenMan.add(e)
             enemies_map.append(e)
         elif col == "e":
             e = Enemy.weakEnemy(x,y)
             enemies.add(e)
+            weakEn.add(e)
             enemies_map.append(e)
         x += 44
     y += 44
@@ -126,6 +117,7 @@ while running:
                     wy = (player.rect.bottom + player.rect.top)/2
                     newWave = Projectile.wave(wx, wy, bulletDirection)
                     playerProjectiles.append(newWave)
+                    playerProj.add(newWave)
         elif event.type == GameConstants.QUIT:
             running = False
 
@@ -211,6 +203,14 @@ while running:
                 player.kill()
                 running = False
 
+    for playerbullet in playerProjectiles:
+        if pygame.sprite.spritecollideany(playerbullet, enemies):
+            collision = pygame.sprite.spritecollide(playerbullet, enemies, True)
+            if collision:
+                playerbullet.kill()
+                enemies_map.remove(collision[0])
+                collision[0].kill()
+                playerProjectiles.remove(playerbullet)
     pygame.display.flip()
     if playerShootCooldown > 0:
         playerShootCooldown = playerShootCooldown -1

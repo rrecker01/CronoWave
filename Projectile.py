@@ -6,6 +6,7 @@ import random
 
 class wave(pygame.sprite.Sprite):
     def __init__(self, x, y, facing):
+        super(wave, self).__init__()
         self.facing = facing
         self.surf = pygame.image.load("Sprites/waveprojectike.png").convert_alpha()
         self.rect = self.surf.get_rect()
