@@ -28,6 +28,7 @@ playerProj = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
 bg = pygame.image.load("Sprites\chernobylfloor1.png")
+
 startScreen = pygame.image.load("Sprites\\titleframe1.png")
 titlebg = pygame.image.load("Sprites\space1.png")
 deathScreen = pygame.image.load("Sprites\gameover.png")
@@ -153,11 +154,8 @@ while running:
         i+=1
 
     player.update(pressed_keys)
-
     
     camera.update()
-
-    world.fill((0,0,0))
    
     world.blit(bg, (0,0))
     world.blit(bg, (1800 ,0))
