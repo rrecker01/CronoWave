@@ -2,6 +2,7 @@ from operator import truediv
 import pygame
 import Player
 import Enemy
+import Projectile
 import GameConstants
 import Entities
 import random
@@ -31,7 +32,9 @@ player = Player.PC()
 
 
 all_sprites.add(player)
-
+playerProjectiles = []
+playerShootCooldown = 0
+bulletDirection = "right"
 platforms = []
 enemies_map = []
 
@@ -44,7 +47,7 @@ map = ["                                                                        
 "                                                                                                                ",
 "                                                                                                                ",
 "                                                                                                                ",
-"                          e                             p p p p                                                 ",
+"                          e                             lp p p pr                                               ",
 "                       lp p pr                  lp pr                                                            ",
 "                                                                                                                ",
 "                                                                                                                ",
@@ -92,6 +95,23 @@ while running:
         if event.type == GameConstants.KEYDOWN:
             if event.key == GameConstants.K_ESCAPE:
                 running = False
+            
+            if event.key == GameConstants.K_LEFT:
+                bulletDirection = "left"
+                #wx = player.rect.left
+            elif event.key == GameConstants.K_RIGHT:
+                bulletDirection = "right"
+                #wx = player.rect.right
+            if event.key == GameConstants.K_SPACE:
+                if playerShootCooldown == 0:
+                    playerShootCooldown = 60
+                    if bulletDirection == "left":
+                        wx = player.rect.left
+                    else:
+                        wx = player.rect.right
+                    wy = (player.rect.bottom + player.rect.top)/2
+                    newWave = Projectile.wave(wx, wy, bulletDirection)
+                    playerProjectiles.append(newWave)
         elif event.type == GameConstants.QUIT:
             running = False
 
@@ -100,6 +120,11 @@ while running:
     pressed_keys = pygame.key.get_pressed()
 
     movecheck = random.randint(0,100)
+
+    i = 0
+    while i < len(playerProjectiles):
+        playerProjectiles[i].update()
+        i+=1
 
     player.update(pressed_keys)
 
@@ -151,7 +176,8 @@ while running:
    
     world.blit(player.surf, player.rect)
 
-    
+    for wave in playerProjectiles:
+        world.blit(wave.surf, wave.rect) 
     for waveEnemy in enemyBullet:
         world.blit(waveEnemy.surf, waveEnemy.rect)
     for gre in grenade:
@@ -165,8 +191,9 @@ while running:
         running = False
 
     pygame.display.flip()
-
-    timer.tick(60)
+    if playerShootCooldown > 0:
+        playerShootCooldown = playerShootCooldown -1
+    timer.tick(140)
 
 
 
