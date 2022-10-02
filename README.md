@@ -1,4 +1,4 @@
-#CronoWave: Global Appliance
+# CronoWave: Global Appliance
 
 Our game, "ChronoWave: Global Appliance" follows the protagonist who is a part of the Reheated Rebellion fighting against the evils of fossil fuels as they've taken
 over the Earth as the only power source available. In this world, humans have advanced to have microwaves for heads and require constant power to live. The grand
