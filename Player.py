@@ -14,7 +14,7 @@ class PC(pygame.sprite.Sprite):
         self.onGround = True
         self.yVel = 0
         self.xVel = 0
-        self.currhealth = 10
+        self.currhealth = 1
         self.invinc = 0
 
 

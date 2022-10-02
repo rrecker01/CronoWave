@@ -18,9 +18,9 @@ class wave(pygame.sprite.Sprite):
 
     def update(self):
         if self.facing == "left":
-            self.rect.move_ip(-8, 0)
+            self.rect.move_ip(-10, 0)
         else:
-            self.rect.move_ip(8,0)
+            self.rect.move_ip(10,0)
     
 
     
@@ -37,7 +37,7 @@ class waveEnemy(pygame.sprite.Sprite):
         self.damage = 1
 
     def update(self):
-        self.rect.move_ip(2*self.facing,0)
+        self.rect.move_ip(8*self.facing,0)
 
         #check borders
         if self.rect.left < 0:
@@ -65,7 +65,7 @@ class grenade(pygame.sprite.Sprite):
         if value != 1:
             value = 0
         self.gravity = self.gravity + value
-        self.rect.move_ip(2*self.facing, self.gravity)
+        self.rect.move_ip(8*self.facing, self.gravity)
 
         #check borders
         if self.rect.left < 0:
