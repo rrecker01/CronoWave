@@ -148,7 +148,6 @@ while running:
     
 
     if pygame.sprite.spritecollideany(player, platform):
-        #player.gravity()
         collision = pygame.sprite.spritecollide(player, platform, False)
         if collision:
             if player.rect.bottom -1 == collision[0].rect.top:
