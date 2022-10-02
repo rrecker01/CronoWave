@@ -25,6 +25,7 @@ proj = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
 bg = pygame.image.load("Sprites\chernobylfloor1.png")
+startScreen = pygame.image.load("Sprites\\titleframe1.png")
 
 
 
@@ -86,10 +87,23 @@ camera = Scroll.Camera(player, world_length)
 
 enemyBullet = []
 grenade = []
+title = True
 
 while running:
 
     timer = pygame.time.Clock()
+
+    while title:
+        for event in pygame.event.get():
+            if event.type == GameConstants.KEYDOWN:
+                if event.key == GameConstants.K_SPACE:
+                    title = False
+                elif event.key == GameConstants.K_ESCAPE:
+                    running = False
+                    title = False
+                else:
+                    screen.blit(startScreen, (0,0))
+
 
     for event in pygame.event.get():
         if event.type == GameConstants.KEYDOWN:
