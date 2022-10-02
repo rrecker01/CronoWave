@@ -12,10 +12,9 @@ class Camera():
     def update(self):
         if self.target:
             self.cam.center = self.target.rect.center
-            if self.cam.left <= -self.worldLength:
-                self.cam.left = -self.worldLength
+            if self.cam.left <= 0:
+                self.cam.left = 0
             if self.cam.right >= self.worldLength:
-                print("hello!")
                 self.cam.right = self.worldLength
             if self.cam.bottom >= GameConstants.SCREEN_HEIGHT:
                 self.cam.bottom = GameConstants.SCREEN_HEIGHT

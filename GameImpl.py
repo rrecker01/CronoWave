@@ -23,6 +23,8 @@ ovenMan = pygame.sprite.Group()
 proj = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
+bg = pygame.image.load("Sprites\chernobylfloor1Stretch.png")
+
 
 
 player = Player.PC()
@@ -49,20 +51,20 @@ map = ["                                                                        
 "                                                                                                                ",
 "                                                                                                                ",
 "                                                                                                                ",
+"                                                        ppppppp                                                 ",
+"                          ppppp               pppp                                                              ",
 "                                                                                                                ",
 "                                                                                                                ",
-"                                                                                                                ",
-"                                                                                                                ",
-"                                                                                                                ",
-"                                                                                                                ",
-"                                                                                                                ",
-"                                                                                                                ",
-"gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"]
+"gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
+"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
+"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu"]
 
 for row in map:
     for col in row:
-        if col == "g":
-            g = Entities.Platform(x,y)
+        if col != " ":
+            g = Entities.Platform(x,y, col)
             platforms.append(g)
             platform.add(g)
         x += 44
@@ -92,9 +94,10 @@ while running:
         elif event.type == GameConstants.QUIT:
             running = False
 
+    player.collision(platforms)
+
     pressed_keys = pygame.key.get_pressed()
 
-    player.gravity()
     movecheck = random.randint(0,100)
 
     player.update(pressed_keys)
@@ -124,7 +127,8 @@ while running:
         gre.kill()
     camera.update()
    
-    world.fill((255, 255, 255))
+    world.blit(bg, (0,0))
+    world.blit(bg, (1800 ,0))
    
     i = 0
     while i < len(platforms):
@@ -133,6 +137,7 @@ while running:
         i += 1
    
     world.blit(player.surf, player.rect)
+
 
     world.blit(weakEnemy.surf, weakEnemy.rect)
     world.blit(Oven.surf, Oven.rect)
@@ -143,24 +148,15 @@ while running:
         world.blit(gre.surf, gre.rect)
     camera.draw(world, screen)
 
-    
-
-    
-
-    if pygame.sprite.spritecollideany(player, platform):
-        collision = pygame.sprite.spritecollide(player, platform, False)
-        if collision:
-            if player.rect.bottom -1 == collision[0].rect.top:
-                player.rect.bottom = collision[0].rect.top
-            if player.rect.top + 1 == collision[0].rect.bottom:
-                player.gravity()
+  
 
     if pygame.sprite.spritecollideany(player, proj):
         player.kill()
         running = False
+
     pygame.display.flip()
 
-    timer.tick(140)
+    timer.tick(70)
 
 
 
