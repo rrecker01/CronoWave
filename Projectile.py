@@ -17,6 +17,7 @@ class wave(pygame.sprite.Sprite):
 
 class waveEnemy(pygame.sprite.Sprite):
     def __init__(self, x, y, facing):
+        super(waveEnemy, self).__init__()
         self.surf = pygame.image.load("Sprites/waveprojectike.png")
         self.rect = self.surf.get_rect()
         self.rect.left = x
@@ -34,6 +35,7 @@ class waveEnemy(pygame.sprite.Sprite):
 
 class grenade(pygame.sprite.Sprite):
     def __init__(self,x, y, facing):
+        super(grenade, self).__init__()
         #change image
         self.surf = pygame.image.load("Sprites/waveprojectike.png")
         self.rect = self.surf.get_rect()

@@ -20,6 +20,7 @@ platform = pygame.sprite.Group()
 enemies = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 ovenMan = pygame.sprite.Group()
+proj = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
 
@@ -103,12 +104,16 @@ while running:
     for enemy in enemies:
         val = enemy.shoot()
         if val != 0:
-            enemyBullet.append(Projectile.waveEnemy(round((enemy.rect.left + enemy.rect.right)//2), round((enemy.rect.bottom + enemy.rect.top)//2), enemy.speed))
+            shot = Projectile.waveEnemy(round((enemy.rect.left + enemy.rect.right)//2), round((enemy.rect.bottom + enemy.rect.top)//2), enemy.speed)
+            proj.add(shot)
+            enemyBullet.append(shot)
     
     for oven in ovenMan:
         val2 = oven.shoot2()
         if val2 != 0:
-            grenade.append(Projectile.grenade(round((oven.rect.left + oven.rect.right)//2), round((oven.rect.bottom + oven.rect.top)//2), enemy.speed))
+            shot2 = Projectile.grenade(round((oven.rect.left + oven.rect.right)//2), round((oven.rect.bottom + oven.rect.top)//2), enemy.speed)
+            grenade.append(shot2)
+            proj.add(shot2)
     for waveEnemy in enemyBullet:
        die= waveEnemy.update()
        if die:
@@ -150,6 +155,10 @@ while running:
                 player.rect.bottom = collision[0].rect.top
             if player.rect.top + 1 == collision[0].rect.bottom:
                 player.gravity()
+
+    if pygame.sprite.spritecollideany(player, proj):
+        player.kill()
+        running = False
     pygame.display.flip()
 
     timer.tick(140)
