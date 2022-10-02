@@ -1,4 +1,5 @@
 from operator import truediv
+from tracemalloc import start
 import pygame
 import Player
 import Enemy
@@ -28,7 +29,8 @@ playerProj = pygame.sprite.Group()
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
 bg = pygame.image.load("Sprites\chernobylfloor1.png")
 startScreen = pygame.image.load("Sprites\\titleframe1.png")
-
+titlebg = pygame.image.load("Sprites\space1.png")
+deathScreen = pygame.image.load("Sprites\gameover.png")
 
 
 player = Player.PC()
@@ -94,20 +96,26 @@ enemyBullet = []
 grenade = []
 title = True
 
+
+while title:
+    for event in pygame.event.get():
+        if event.type == GameConstants.KEYDOWN:
+            if event.key == GameConstants.K_SPACE:
+                title = False
+            elif event.key == GameConstants.K_ESCAPE:
+                 running = False
+                 title = False
+        else:
+            startScreen = pygame.transform.scale(startScreen, (1280, 720))
+            titlebg = pygame.transform.scale(titlebg, (1500,720) )
+            screen.blit(titlebg, (0,0))
+            screen.blit(startScreen, (0,0))
+            pygame.display.update()
+
 while running:
 
     timer = pygame.time.Clock()
 
-    while title:
-        for event in pygame.event.get():
-            if event.type == GameConstants.KEYDOWN:
-                if event.key == GameConstants.K_SPACE:
-                    title = False
-                elif event.key == GameConstants.K_ESCAPE:
-                    running = False
-                    title = False
-                else:
-                    screen.blit(startScreen, (0,0))
 
 
     for event in pygame.event.get():
@@ -238,7 +246,12 @@ while running:
         playerShootCooldown = playerShootCooldown -1
     timer.tick(140)
 
-
+counter = 300
+while counter >= 0:
+    #deathScreen = pygame.transform.scale(deathScreen, (1500,720))
+    screen.blit(deathScreen, (750,360))
+    pygame.display.update()
+    counter = counter - 1
 
 
 pygame.quit()
