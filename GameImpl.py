@@ -211,6 +211,16 @@ while running:
                 enemies_map.remove(collision[0])
                 collision[0].kill()
                 playerProjectiles.remove(playerbullet)
+    
+    if pygame.sprite.spritecollideany(player, enemies):
+        collision = pygame.sprite.spritecollide(player, enemies, False)
+        if collision:
+            death = player.takeDamage(1)
+            health.update(player.currhealth)
+
+            if death:
+                player.kill()
+                running = False
     pygame.display.flip()
     if playerShootCooldown > 0:
         playerShootCooldown = playerShootCooldown -1
