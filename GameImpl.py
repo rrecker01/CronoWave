@@ -43,10 +43,10 @@ map = ["                                                                        
 "                                                                                                                ",
 "                                                                                                                ",
 "                                                                                                                ",
-"                                                           o                                                    ",
-"                                                        ppppppp                                                 ",
-"                                                 e                                                              ",
-"                        ppppp                 pppp                                                              ",
+"                                                                                                                ",
+"                         e                              ppppppp                                                 ",
+"                       ppppp                  pppp                                                              ",
+"                                                                                                            ",
 "                                                                                                                ",
 "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
 "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
@@ -118,7 +118,7 @@ while running:
 
     i = 0
     while i < len(enemies):
-        enemies[i].update(movecheck)
+        enemies[i].update(1)
         world.blit(enemies[i].surf, platforms[i].rect)
         i += 1
    
