@@ -85,7 +85,6 @@ while running:
 
     pressed_keys = pygame.key.get_pressed()
 
-    player.gravity()
     movecheck = random.randint(0,100)
 
     player.update(pressed_keys)
@@ -118,6 +117,8 @@ while running:
         if collision:
             if player.rect.bottom -1 == collision[0].rect.top:
                 player.rect.bottom = collision[0].rect.top
+                player.yVel = 0
+                player.onGround = True
             if player.rect.top + 1 == collision[0].rect.bottom:
                 player.gravity()
     pygame.display.flip()
