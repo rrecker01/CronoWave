@@ -22,6 +22,8 @@ enemies = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 ovenMan = pygame.sprite.Group()
 proj = pygame.sprite.Group()
+weakEn = pygame.sprite.Group()
+playerProj = pygame.sprite.Group()
 
 world = pygame.Surface((3*GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT))
 bg = pygame.image.load("Sprites\chernobylfloor1.png")
@@ -30,6 +32,7 @@ startScreen = pygame.image.load("Sprites\\titleframe1.png")
 
 
 player = Player.PC()
+health = Player.healthBar()
 
 
 all_sprites.add(player)
@@ -44,14 +47,14 @@ y = 0
 map = ["                                                                                                                ",
 "                                                                                                                ",
 "                                                                                                                ",
+"                e                                                                                               ",
+"              lp r                                                                                              ",
 "                                                                                                                ",
+"                                                            o                                                   ",
+"                          e                             lp p p pr                  o  o                         ",
+"       lp r             lp p pr                  lp pr                         lp p p p p r                      ",
 "                                                                                                                ",
-"                                                                                                                ",
-"                                                             o                                                  ",
-"                          e                             lp p p pr                                               ",
-"                       lp p pr                  lp pr                                                            ",
-"                                                                                                                ",
-"                                                                                                                ",
+"                                  e                               e                                             ",
 "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
 "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
 "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
@@ -67,10 +70,12 @@ for row in map:
         elif col == "o":
             e = Enemy.Oven(x,y)
             enemies.add(e)
+            ovenMan.add(e)
             enemies_map.append(e)
         elif col == "e":
             e = Enemy.weakEnemy(x,y)
             enemies.add(e)
+            weakEn.add(e)
             enemies_map.append(e)
         x += 44
     y += 44
@@ -126,6 +131,7 @@ while running:
                     wy = (player.rect.bottom + player.rect.top)/2
                     newWave = Projectile.wave(wx, wy, bulletDirection)
                     playerProjectiles.append(newWave)
+                    playerProj.add(newWave)
         elif event.type == GameConstants.QUIT:
             running = False
 
@@ -163,7 +169,7 @@ while running:
         enemies_map[i].update()
         i += 1
 
-    for enemy in enemies:
+    for enemy in weakEn:
         val = enemy.shoot()
         if val != 0:
             shot = Projectile.waveEnemy(round((enemy.rect.left + enemy.rect.right)//2), round((enemy.rect.bottom + enemy.rect.top)//2), enemy.speed)
@@ -195,13 +201,38 @@ while running:
     for gre in grenade:
         world.blit(gre.surf, gre.rect)
     camera.draw(world, screen)
+    screen.blit(health.surf, health.rect)
 
   
 
     if pygame.sprite.spritecollideany(player, proj):
-        player.kill()
-        running = False
+        collision = pygame.sprite.spritecollide(player, proj, False)
+        if collision:
+            death = player.takeDamage(collision[0].damage)
+            health.update(player.currhealth)
 
+            if death:
+                player.kill()
+                running = False
+
+    for playerbullet in playerProjectiles:
+        if pygame.sprite.spritecollideany(playerbullet, enemies):
+            collision = pygame.sprite.spritecollide(playerbullet, enemies, True)
+            if collision:
+                playerbullet.kill()
+                enemies_map.remove(collision[0])
+                collision[0].kill()
+                playerProjectiles.remove(playerbullet)
+    
+    if pygame.sprite.spritecollideany(player, enemies):
+        collision = pygame.sprite.spritecollide(player, enemies, False)
+        if collision:
+            death = player.takeDamage(1)
+            health.update(player.currhealth)
+
+            if death:
+                player.kill()
+                running = False
     pygame.display.flip()
     if playerShootCooldown > 0:
         playerShootCooldown = playerShootCooldown -1
