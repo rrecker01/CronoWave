@@ -219,7 +219,20 @@ while running:
 
             if death:
                 player.kill()
-                running = False
+                death_screen = True
+                while death_screen:
+                    deathScreen = pygame.transform.scale(deathScreen, (1408,704))
+                    screen.blit(deathScreen, (0,0))
+                    pygame.display.update()
+                    for event in pygame.event.get():
+                        if event.type == GameConstants.KEYDOWN:
+                            if event.key == GameConstants.K_SPACE:
+                                running = False
+                                death_screen = False
+                            elif event.key == GameConstants.K_ESCAPE:
+                                running = False
+                                death_screen = False
+
 
     for playerbullet in playerProjectiles:
         if pygame.sprite.spritecollideany(playerbullet, enemies):
@@ -238,18 +251,25 @@ while running:
 
             if death:
                 player.kill()
-                running = False
+                death_screen = True
+                while death_screen:
+                    deathScreen = pygame.transform.scale(deathScreen, (1408,704))
+                    screen.blit(deathScreen, (0,0))
+                    pygame.display.update()
+                    for event in pygame.event.get():
+                        if event.type == GameConstants.KEYDOWN:
+                            if event.key == GameConstants.K_SPACE:
+                                running = False
+                                death_screen = False
+                            elif event.key == GameConstants.K_ESCAPE:
+                                running = False
+                                death_screen = False
     pygame.display.flip()
     if playerShootCooldown > 0:
         playerShootCooldown = playerShootCooldown -1
     timer.tick(140)
 
-counter = 300
-while counter >= 0:
-    #deathScreen = pygame.transform.scale(deathScreen, (1500,720))
-    screen.blit(deathScreen, (750,360))
-    pygame.display.update()
-    counter = counter - 1
+
 
 
 pygame.quit()
